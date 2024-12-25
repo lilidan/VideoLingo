@@ -43,12 +43,12 @@ def check_ask_gpt_history(prompt, model, log_title):
                     return item["response"]
     return False
 
-def ask_gpt(prompt, response_json=True, valid_def=None, log_title='default'):
+def ask_gpt(prompt, response_json=True, valid_def=None, log_title='default',skip_history=False):
     api_set = load_key("api")
     llm_support_json = load_key("llm_support_json")
     with LOCK:
         history_response = check_ask_gpt_history(prompt, api_set["model"], log_title)
-        if history_response:
+        if history_response and not skip_history:
             return history_response
     
     if not api_set["key"]:
@@ -65,7 +65,8 @@ def ask_gpt(prompt, response_json=True, valid_def=None, log_title='default'):
         try:
             completion_args = {
                 "model": api_set["model"],
-                "messages": messages
+                "messages": messages,
+                "temperature":1.3 if skip_history else 1.0
             }
             if response_format is not None:
                 completion_args["response_format"] = response_format
@@ -75,7 +76,6 @@ def ask_gpt(prompt, response_json=True, valid_def=None, log_title='default'):
             if response_json:
                 try:
                     response_data = json_repair.loads(response.choices[0].message.content)
-                    
                     # check if the response is valid, otherwise save the log and raise error and retry
                     if valid_def:
                         valid_response = valid_def(response_data)

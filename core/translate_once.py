@@ -31,14 +31,14 @@ def translate_lines(lines, previous_content_prompt, after_cotent_prompt, things_
             return valid_translate_result(response_data, ['1'], ['direct'])
         def valid_express(response_data):
             return valid_translate_result(response_data, ['1'], ['free'])
-        for retry in range(3):
+        for retry in range(5):
             if step_name == 'faithfulness':
-                result = ask_gpt(prompt+retry* " ", response_json=True, valid_def=valid_faith, log_title=f'translate_{step_name}')
+                result = ask_gpt(prompt+retry* " ", response_json=True, valid_def=valid_faith, log_title=f'translate_{step_name}', skip_history=retry>2)
             elif step_name == 'expressiveness':
-                result = ask_gpt(prompt+retry* " ", response_json=True, valid_def=valid_express, log_title=f'translate_{step_name}')
+                result = ask_gpt(prompt+retry* " ", response_json=True, valid_def=valid_express, log_title=f'translate_{step_name}', skip_history=retry>2)
             if len(lines.split('\n')) == len(result):
                 return result
-            if retry != 2:
+            if retry != 4:
                 console.print(f'[yellow]⚠️ {step_name.capitalize()} translation of block {index} failed, Retry...[/yellow]')
         raise ValueError(f'[red]❌ {step_name.capitalize()} translation of block {index} failed after 3 retries. Please check `output/gpt_log/error.json` for more details.[/red]')
 
