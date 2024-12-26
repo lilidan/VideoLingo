@@ -10,7 +10,7 @@ api:
 target_language: '简体中文'
 
 # Whether to use Demucs for vocal separation before transcription
-demucs: true
+demucs: false
 
 whisper:
   # ["medium", "large-v3", "large-v3-turbo"]. Note: for zh model will force to use Belle/large-v3
@@ -20,7 +20,7 @@ whisper:
   detected_language: 'ja'
 
 # Video resolution [0x0, 640x360, 1920x1080]  0x0 will generate a 0-second black video placeholder
-resolution: '1920x1080'
+resolution: '0x0'
 
 ## ======================== Advanced Settings ======================== ##
 # *Default resolution for downloading YouTube videos [360, 1080, best]

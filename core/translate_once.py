@@ -49,6 +49,7 @@ def translate_lines(lines, previous_content_prompt, after_cotent_prompt, things_
     for i in faith_result:
         faith_result[i]["direct"] = faith_result[i]["direct"].replace('\n', ' ')
 
+
     # If reflect_translate is False or not set, use faithful translation directly
     reflect_translate = load_key('reflect_translate')
     if not reflect_translate:
